@@ -2,7 +2,6 @@
  * jquery.databar - jQuery plugin for Excel-style data bar.
  * https://github.com/ts-3156/databar
  * Released under the MIT license
- * Version: 0.0.1
  */
 (function ($) {
   $.fn.databar = function (options) {
