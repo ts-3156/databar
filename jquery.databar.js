@@ -7,50 +7,76 @@
   $.fn.databar = function (options) {
     var options = options || {};
 
+    var colorMaker = (function(){
+      var n = 0;
+      var colors = [
+        'rgba(181, 137, 0, 0.4)',   // '#b58900',
+        'rgba(203, 75, 22, 0.4)',   // '#cb4b16',
+        'rgba(220, 50, 47, 0.4)',   // '#dc322f',
+        'rgba(211, 54, 130, 0.4)',  // '#d33682',
+        'rgba(108, 113, 196, 0.4)', // '#6c71c4',
+        'rgba(38, 139, 210, 0.4)',  // '#268bd2',
+        'rgba(42, 161, 152, 0.4)',  // '#2aa198',
+        'rgba(133, 153, 0, 0.4)'    // '#859900'
+      ];
+      return function() {
+        n++;
+        if(n >= colors.length){
+          n = 0;
+        }
+        return colors[n];
+      };
+    })();
+
     options.css = $.extend({
-      backgroundColor: 'rgba(64,153,255,0.25)',
       textAlign: 'right'
     }, options.css);
 
-    var $tds = $(this),
-      numbers = [];
+    var $table = $(this);
+    var column_size = $table.find('tbody tr').first().find('td').length;
 
-    $tds.each(function (i) {
-      var text = $(this).text();
-      var stripped = text.replace(/[\s,%$\\]/g, '');
-      if ($.isNumeric(stripped)) {
-        numbers[i] = parseFloat(stripped);
-      } else {
-        numbers[i] = false;
-      }
-    });
+    for(var i = 0; i < column_size; i++){
+      var $vertical_tds = $table.find('tbody tr > :nth-child(' + (i + 1) + ')');
+      var numbers = $vertical_tds.map(function (i) {
+        var text = $(this).text();
 
-    (function ($tds, options) {
-      var metrics = {};
-      metrics['100%'] = Math.max.apply(null, numbers);
-
-      $tds.each(function (i) {
-        if (numbers[i] === false) {
-          return true;
+        var stripped = text.replace(/[\s,%$\\]/g, '');
+        if ($.isNumeric(stripped)) {
+          return parseFloat(stripped);
+        } else {
+          return false;
         }
-        var $bar = $('<span />')
-          .css($.extend({
-            'position': 'absolute',
-            'top': 0,
-            'left': 0,
-            'zIndex': 0,
-            'display': 'block',
-            'height': '100%',
-            'width': (100 * numbers[i] / metrics['100%']) + '%'
-          }, options.css));
-        $(this).prepend($bar);
-
-        $(this).wrapInner($('<div />').css({
-          'position': 'relative',
-          'textAlign': options.css['textAlign']
-        }));
       });
-    })($tds, options);
+
+      (function ($tds, options) {
+        var metrics = {};
+        metrics['100%'] = Math.max.apply(null, numbers);
+        var color = colorMaker();
+
+        $tds.each(function (i) {
+          if (numbers[i] === false) {
+            return true;
+          }
+          var $bar = $('<span />')
+            .css($.extend({
+              'position': 'absolute',
+              'top': 0,
+              'left': 0,
+              'zIndex': 0,
+              'display': 'block',
+              'height': '100%',
+              'width': (100 * numbers[i] / metrics['100%']) + '%',
+              'backgroundColor': color
+            }, options.css));
+          $(this).prepend($bar);
+
+          $(this).wrapInner($('<div />').css({
+            'position': 'relative',
+            'textAlign': options.css['textAlign']
+          }));
+        });
+      })($vertical_tds, options);
+    }
 
     return this;
   }
