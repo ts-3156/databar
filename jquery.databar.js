@@ -7,23 +7,24 @@
   $.fn.databar = function (options) {
     var options = options || {};
 
-    var colorMaker = (function(){
+    var colorMaker = (function () {
       var n = 0;
+      var backgroundOpacity = (options.backgroundOpacity || 0.4);
       // solarized colors
       // http://ethanschoonover.com/solarized
       var colors = [
-        'rgba(181, 137, 0, 0.4)',   // '#b58900',
-        'rgba(203, 75, 22, 0.4)',   // '#cb4b16',
-        'rgba(220, 50, 47, 0.4)',   // '#dc322f',
-        'rgba(211, 54, 130, 0.4)',  // '#d33682',
-        'rgba(108, 113, 196, 0.4)', // '#6c71c4',
-        'rgba(38, 139, 210, 0.4)',  // '#268bd2',
-        'rgba(42, 161, 152, 0.4)',  // '#2aa198',
-        'rgba(133, 153, 0, 0.4)'    // '#859900'
+          'rgba(181, 137, 0, ' + backgroundOpacity + ')',   // '#b58900',
+          'rgba(203, 75, 22, ' + backgroundOpacity + ')',   // '#cb4b16',
+          'rgba(220, 50, 47, ' + backgroundOpacity + ')',   // '#dc322f',
+          'rgba(211, 54, 130, ' + backgroundOpacity + ')',  // '#d33682',
+          'rgba(108, 113, 196, ' + backgroundOpacity + ')', // '#6c71c4',
+          'rgba(38, 139, 210, ' + backgroundOpacity + ')',  // '#268bd2',
+          'rgba(42, 161, 152, ' + backgroundOpacity + ')',  // '#2aa198',
+          'rgba(133, 153, 0, ' + backgroundOpacity + ')'    // '#859900'
       ];
-      return function() {
+      return function () {
         n++;
-        if(n >= colors.length){
+        if (n >= colors.length) {
           n = 0;
         }
         return colors[n];
@@ -35,26 +36,26 @@
     }, options.css);
 
     var $table = $(this);
-    if($table.find('thead').length == 0){
+    if ($table.find('thead').length == 0) {
       console.error('thead not found. please use thead, th, tbody, tr and td.');
       return;
     }
-    if($table.find('tbody').length == 0){
+    if ($table.find('tbody').length == 0) {
       console.error('tbody not found. please use thead, th, tbody, tr and td.');
       return;
     }
-    if($table.find('tbody tr').length == 0){
+    if ($table.find('tbody tr').length == 0) {
       console.error('tr not found. please use thead, th, tbody, tr and td.');
       return;
     }
-    if($table.find('tbody tr td').length == 0){
+    if ($table.find('tbody tr td').length == 0) {
       console.error('td not found. please use thead, th, tbody, tr and td.');
       return;
     }
 
     var column_size = $table.find('tbody tr').first().find('td').length;
 
-    for(var i = 0; i < column_size; i++){
+    for (var i = 0; i < column_size; i++) {
       var $vertical_tds = $table.find('tbody tr > :nth-child(' + (i + 1) + ')');
       var numbers = $vertical_tds.map(function (i) {
         var text = $(this).text();
