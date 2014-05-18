@@ -9,6 +9,8 @@
 
     var colorMaker = (function(){
       var n = 0;
+      // solarized colors
+      // http://ethanschoonover.com/solarized
       var colors = [
         'rgba(181, 137, 0, 0.4)',   // '#b58900',
         'rgba(203, 75, 22, 0.4)',   // '#cb4b16',

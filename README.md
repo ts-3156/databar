@@ -3,6 +3,14 @@
 jquery.databar - jQuery plugin for Excel-style data bar.
 
 
+## Demo
+
+1. download this repository
+1. double click examples/demo.html
+
+![Demo](/examples/demo.png)
+
+
 ## Installation
 
 In most cases, to use Databar all you need to do is include jQuery, the Databar Javascript file in your HTML page:
