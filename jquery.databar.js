@@ -60,7 +60,7 @@
       var numbers = $vertical_tds.map(function (i) {
         var text = $(this).text();
 
-        var stripped = text.replace(/[\s,%$\\]/g, '');
+        var stripped = text.replace(/[\s,%$円€\\]/g, '');
         if ($.isNumeric(stripped)) {
           return parseFloat(stripped);
         } else {
