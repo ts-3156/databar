@@ -1,7 +1,7 @@
 {
   "name": "databar",
   "title": "jquery.databar",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "jquery.databar - jQuery plugin for Excel-style data bar.",
   "homepage": "https://github.com/ts-3156/databar",
   "docs": "https://github.com/ts-3156/databar",

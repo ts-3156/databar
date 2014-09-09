@@ -4,12 +4,13 @@
  * Released under the MIT license
  */
 (function ($) {
-  $.fn.databar = function (options) {
+  var ColorMaker = function(options) {
     var options = options || {};
+    this.options = $.extend({}, options);
 
-    var colorMaker = (function () {
+    this.color = (function (self) {
       var n = 0;
-      var backgroundOpacity = (options.backgroundOpacity || 0.4);
+      var backgroundOpacity = (self.options.backgroundOpacity || 0.4);
       // solarized colors
       // http://ethanschoonover.com/solarized
       var colors = [
@@ -29,29 +30,35 @@
         }
         return colors[n];
       };
-    })();
+    })(this);
+  };
+
+  var throw_if_invalid_html = function($table){
+    if ($table.find('thead').length == 0) {
+      throw 'thead not found. please use thead, th, tbody, tr and td.';
+    }
+    if ($table.find('tbody').length == 0) {
+      throw 'tbody not found. please use thead, th, tbody, tr and td.';
+    }
+    if ($table.find('tbody tr').length == 0) {
+      throw 'tr not found. please use thead, th, tbody, tr and td.';
+    }
+    if ($table.find('tbody tr td').length == 0) {
+      throw 'td not found. please use thead, th, tbody, tr and td.';
+    }
+  };
+
+  $.fn.databar = function (options) {
+    var options = options || {};
+    var colorMaker = new ColorMaker(options);
 
     options.css = $.extend({
       textAlign: 'right'
     }, options.css);
 
+
     var $table = $(this);
-    if ($table.find('thead').length == 0) {
-      console.error('thead not found. please use thead, th, tbody, tr and td.');
-      return;
-    }
-    if ($table.find('tbody').length == 0) {
-      console.error('tbody not found. please use thead, th, tbody, tr and td.');
-      return;
-    }
-    if ($table.find('tbody tr').length == 0) {
-      console.error('tr not found. please use thead, th, tbody, tr and td.');
-      return;
-    }
-    if ($table.find('tbody tr td').length == 0) {
-      console.error('td not found. please use thead, th, tbody, tr and td.');
-      return;
-    }
+    throw_if_invalid_html($table);
 
     var column_size = $table.find('tbody tr').first().find('td').length;
 
@@ -71,7 +78,7 @@
       (function ($tds, options) {
         var metrics = {};
         metrics['100%'] = Math.max.apply(null, numbers);
-        var color = colorMaker();
+        var color = colorMaker.color();
 
         $tds.each(function (i) {
           if (numbers[i] === false) {
@@ -101,4 +108,3 @@
     return this;
   }
 }(jQuery));
-
