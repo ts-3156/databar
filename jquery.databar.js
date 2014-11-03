@@ -81,25 +81,33 @@
         var color = colorMaker.color();
 
         $tds.each(function (i) {
+          var $td = $(this);
+
           if (numbers[i] === false) {
             return true;
           }
+          if ($td.hasClass('databar-ignore')) {
+            return true;
+          }
+
           var $bar = $('<span />')
             .css($.extend({
               'position': 'absolute',
               'top': 0,
               'left': 0,
+              'right': 0,
               'zIndex': 0,
               'display': 'block',
               'height': '100%',
               'width': (100 * numbers[i] / metrics['100%']) + '%',
               'backgroundColor': color
             }, options.css));
-          $(this).prepend($bar);
+          $td.prepend($bar);
 
-          $(this).wrapInner($('<div />').css({
-            'position': 'relative',
-            'textAlign': options.css['textAlign']
+          $td.wrapInner($('<div />')
+            .css({
+              'position': 'relative',
+              'min-height': '1.5em' // float bug fix
           }));
         });
       })($vertical_tds, options);
